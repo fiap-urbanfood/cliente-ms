@@ -1,19 +1,14 @@
-from typing import List
+from typing import Generator
 
-from pydantic import BaseSettings, AnyHttpUrl
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.asyncio import AsyncSession
 
-
-class Settings(BaseSettings):
-    """
-    Configurações gerais usadas na aplicação
-    """
-    API_V1_STR: str = '/api/v1'
-    DB_URL: str = "postgresql+asyncpg://geek:university@localhost:5432/faculdade"
-    DBBaseModel = declarative_base()
-
-    class Config:
-        case_sensitive = True
+from core.database import Session
 
 
-settings = Settings()
+async def get_session() -> Generator:
+    session: AsyncSession = Session()
+
+    try:
+        yield session
+    finally:
+        await session.close()
