@@ -36,8 +36,8 @@ export AWS_ACCOUNT='857378965163'
 
 1.2 Docker Build na raiz do projeto..
 ``` bash
-docker build --no-cache --progress=plain -f devops/Dockerfile -t app-client:$API_IMAGE_TAG .
-docker tag app-client:$API_IMAGE_TAG $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/urbanfood/cliente:$API_IMAGE_TAG
+docker build --no-cache --progress=plain -f devops/Dockerfile -t app-cliente:$API_IMAGE_TAG .
+docker tag app-cliente:$API_IMAGE_TAG $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/urbanfood/cliente:$API_IMAGE_TAG
 docker tag $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/urbanfood/cliente:$API_IMAGE_TAG $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/urbanfood/cliente:latest
 ```
 
@@ -46,7 +46,6 @@ docker tag $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/urbanfood/cliente:$API
 aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com
 ```
 
-
 1.4 Docker Push do APP..
 ``` bash
 docker push $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/urbanfood/cliente:$API_IMAGE_TAG
@@ -54,13 +53,12 @@ docker push $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/urbanfood/cliente:lat
 ```
 
 1.5 Rodando o container local..
-```
-docker run -dit -p 8000:8000 --name=app-client app-client:$API_IMAGE_TAG
-
+``` bash
+docker run -dit -p 8000:8000 --name=app-cliente app-cliente:$API_IMAGE_TAG
 ```
 
 1.6 Acesso a API..
-```
+``` bash
 http://localhost:8000/health
 ```
 
