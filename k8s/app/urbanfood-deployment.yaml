@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: app-cliente
+  name: deployment-cliente
+  namespace: urbanfood
+spec:
+  replicas: 1
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: app-cliente
+  minReadySeconds: 60
+  strategy:
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 1
+    type: RollingUpdate      
+  template:
+    metadata:
+      labels:
+        app: app-cliente
+    spec:
+      containers:
+        - name: app-cliente
+          image: 857378965163.dkr.ecr.us-east-1.amazonaws.com/urbanfood/cliente:latest
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: configmap-cliente
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            periodSeconds: 30
+            timeoutSeconds: 15
+            failureThreshold: 3
+            initialDelaySeconds: 60
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            periodSeconds: 30
+            timeoutSeconds: 15
+            failureThreshold: 5
+            initialDelaySeconds: 30
+          resources:
+            requests:
+              cpu: 100m
+              memory: 300Mi
+            limits:
+              cpu: 200m
+              memory: 512Mi
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
