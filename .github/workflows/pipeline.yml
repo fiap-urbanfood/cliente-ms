@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       action:
-        description: 'Deploy Aplication Urbanfood'
+        description: 'Deploy Application - Cliente'
         type: choice
         options:
         - deploy_app
