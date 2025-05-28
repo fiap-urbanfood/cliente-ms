@@ -28,22 +28,6 @@ async def post_curso(cliente: ClienteSchema, db: AsyncSession = Depends(get_sess
     return novo_cliente
 
 
-# GET cliente por CPF
-@router.get("/cpf/{cpf}", response_model=ClienteSchema, status_code=status.HTTP_200_OK)
-async def get_cliente_by_cpf(cpf: str, db: AsyncSession = Depends(get_session)):
-    async with db as session:
-        query = select(ClienteModel).filter(ClienteModel.cpf == cpf)
-        result = await session.execute(query)
-        cliente = result.scalar_one_or_none()
-
-        if cliente:
-            return cliente
-        else:
-            raise HTTPException(
-                detail="Cliente não encontrado.", 
-                status_code=status.HTTP_404_NOT_FOUND
-            )
-
 
 # GET cursos
 @router.get('/', response_model=List[ClienteSchema])
@@ -67,8 +51,10 @@ async def get_curso(cliente_id: int, db: AsyncSession = Depends(get_session)):
             return curso
         else:
             raise HTTPException(
-                detail="Curso não encontrado.", status_code=status.HTTP_404_NOT_FOUND
+                detail="Cliene não encontrado.", status_code=status.HTTP_404_NOT_FOUND
             )
+
+
 
 
 # PUT cliente
@@ -94,10 +80,10 @@ async def put_curso(
 
             await session.commit()
 
-            return cliente_up
+            return curso_up
         else:
             raise HTTPException(
-                detail="Cliente não encontrado.", status_code=status.HTTP_404_NOT_FOUND
+                detail="Curso não encontrado.", status_code=status.HTTP_404_NOT_FOUND
             )
 
 
@@ -116,5 +102,5 @@ async def delete_curso(cliente_id: int, db: AsyncSession = Depends(get_session))
             return Response(status_code=status.HTTP_204_NO_CONTENT)
         else:
             raise HTTPException(
-                detail="Cliente não encontrado.", status_code=status.HTTP_404_NOT_FOUND
+                detail="Curso não encontrado.", status_code=status.HTTP_404_NOT_FOUND
             )
